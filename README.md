@@ -1,5 +1,9 @@
 # Battery Investment Lab
 
+**Live demo:** https://battery-investment-lab.streamlit.app/
+
+**Source code:** https://github.com/KrojHansen/battery-investment-lab
+
 Et interaktivt Python/Streamlit-porteføljeprojekt om batterilagring, handel på det danske day-ahead-elmarked og investeringsanalyse.
 
 ## Funktioner
