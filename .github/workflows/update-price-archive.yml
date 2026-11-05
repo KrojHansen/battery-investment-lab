@@ -1,0 +1,58 @@
+name: Update historical electricity prices
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Build complete archive or update the last completed month'
+        type: choice
+        required: true
+        default: backfill
+        options:
+          - backfill
+          - monthly
+  schedule:
+    - cron: '17 7 4 * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: electricity-price-archive
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install archival dependencies
+        run: python -m pip install 'pandas>=2.2,<3' 'requests>=2.31,<3'
+      - name: Download and validate archived data
+        id: archive
+        continue-on-error: true
+        env:
+          INPUT_MODE: ${{ github.event.inputs.mode }}
+        run: |
+          MODE="${INPUT_MODE:-monthly}"
+          python scripts/update_price_archive.py --mode "$MODE" --start-year 2016 --area both --delay 15 --max-retries 4 --max-wait 600
+      - name: Commit successfully downloaded price files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data_cache/energy_prices_v2/
+          if git diff --cached --quiet; then
+            echo 'No new archive files to commit.'
+          else
+            git commit -m 'Update validated DK1 and DK2 historical prices'
+            git push
+          fi
+      - name: Report incomplete archive
+        if: steps.archive.outcome != 'success'
+        run: |
+          echo 'Some API requests failed. Valid completed files were committed. Rerun the workflow to resume.'
+          exit 1

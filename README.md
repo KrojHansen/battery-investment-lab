@@ -26,6 +26,11 @@ Under **Markedsoptimering** vælger du periode og batteristørrelse og klikker *
 
 **Bemærk:** De statiske demonstrationsresultater åbner direkte på forsiden og i handelsstrategier og investeringsanalysen, uden at et nyt API-kald er nødvendigt. Investeringsanalysens demo har hypotetiske startværdier på 30 mio. kr. for batteriet, 5 mio. kr. til tilslutning, 2 mio. kr. til etablering og 1 mio. kr. i årlige driftsomkostninger. Tallene er alene regneeksempler, ikke pristilbud. De er eksempler fra tidligere gennemførte lokale simuleringer, ikke en prognose.
 
+
+## Offlineprisarkiv og automatisk opdatering
+
+Det historiske prisarkiv for **DK1 og DK2 fra 2016** opbygges med `scripts/update_price_archive.py`. Start den manuelle **backfill** i GitHub Actions under workflowet **Update historical electricity prices**. Filerne valideres, genbruges og gemmes på GitHub. En automatisk kørsel henter den seneste afsluttede måned den 4. i hver måned. Se [PRISARKIV_GUIDE.md](PRISARKIV_GUIDE.md). Hele arkivet findes først, når backfill har kørt færdig.
+
 ## Hosting på Streamlit Community Cloud
 
 1. Opret et offentligt GitHub-repository, eksempelvis `battery-investment-lab`.
@@ -34,7 +39,7 @@ Under **Markedsoptimering** vælger du periode og batteristørrelse og klikker *
 4. Vælg Python 3.12 i avancerede indstillinger hvis muligt. Ingen API-nøgle er nødvendig til Energi Data Service.
 5. Deploy og test især oversigt, strategiernes demo og investeringens demo uden at køre en tung backtest.
 
-Repoet bør ikke indeholde `data_cache/`, `.env`, `secrets.toml`, personlige CSV'er eller virtuelle miljøer. En `.gitignore` følger med.
+Repoet indeholder validerede, historiske prisfiler i `data_cache/energy_prices_v2/`, så de dækkede perioder kan analyseres offline. Upload ikke `.env`, `secrets.toml`, personlige CSV'er eller virtuelle miljøer. En `.gitignore` følger med.
 
 ## Metode og begrænsninger
 
@@ -46,7 +51,7 @@ Den viste sammenligning fra oktober–december 2025 har tidligere været brugt t
 
 ## Kilder og datalicens
 
-**Kilde: Energinet (www.energidataservice.dk), CC BY 4.0.** Den medfølgende `assets/demo_spot_2025_daily.csv` er bearbejdet ved aggregering til daglige gennemsnit for DK1 i 2025. For timeprodukter er døgnmidlet vægtet på de oprindelige timeprodukter, og for kvartersprodukter på 15-minutters observationer. Originale data er ikke medtaget i distributionen. Se https://www.energidataservice.dk/terms-and-conditions.
+**Kilde: Energinet (www.energidataservice.dk), CC BY 4.0.** Den medfølgende `assets/demo_spot_2025_daily.csv` er bearbejdet ved aggregering til daglige gennemsnit for DK1 i 2025. For timeprodukter er døgnmidlet vægtet på de oprindelige timeprodukter, og for kvartersprodukter på 15-minutters observationer. De originale historiske spotpriser lagres i `data_cache/energy_prices_v2/` med kildeangivelse til Energinet og licensen CC BY 4.0. Se https://www.energidataservice.dk/terms-and-conditions.
 
 ## Projektstruktur
 
@@ -69,3 +74,16 @@ requirements.txt
 ```
 
 Dette projekt er en forsknings- og porteføljedemonstration, ikke et system til automatisk handel eller investeringsrådgivning.
+
+
+## Offline price archive and API limits
+
+This portfolio distribution bundles original historical Energi Data Service CSVs
+for DK1 (2024, 2025, and January through October 2026) under
+`data_cache/energy_prices_v2/`. The market optimizer reuses these complete
+files without a network request. Other areas or newer dates still require
+live API access and may be rate-limited (HTTP 429). Prices are never fabricated
+or silently replaced with illustrative figures. The overview dashboard uses a
+separate, explicitly labeled daily demonstration series.
+
+Source: Energinet / Energi Data Service, CC BY 4.0.

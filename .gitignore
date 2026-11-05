@@ -8,9 +8,10 @@ venv/
 *.log
 .DS_Store
 .ipynb_checkpoints/
-# API cache is downloaded on demand. The compact example is stored under assets/.
-data_cache/
-# Local experimental outputs
+# Commit validated historical market prices so the public app works offline.
+# Only transient API cooldown markers and temporary files are ignored.
+data_cache/energy_prices_v2/cooldown_*.json
+data_cache/**/*.tmp
 battery_*.csv
 optimized_*.csv
 dk1_*.csv
