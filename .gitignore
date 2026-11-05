@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+.streamlit/secrets.toml
+*.log
+.DS_Store
+.ipynb_checkpoints/
+# API cache is downloaded on demand. The compact example is stored under assets/.
+data_cache/
+# Local experimental outputs
+battery_*.csv
+optimized_*.csv
+dk1_*.csv

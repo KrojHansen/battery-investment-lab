@@ -1,0 +1,7 @@
+# Python 3.12 recommended for Community Cloud
+streamlit>=1.45,<2
+pandas>=2.2,<3
+numpy>=1.26,<3
+pulp>=3.3,<4
+requests>=2.31,<3
+scikit-learn>=1.5,<2
