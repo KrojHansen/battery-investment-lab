@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "price_area": "DK1",
+    "battery_power_mw": 10,
+    "battery_capacity_mwh": 20,
+    "efficiency": 0.9,
+    "currency": "DKK",
+    "spot_source": "Energinet, Energi Data Service",
+    "year": 2025,
+    "historical_scenario_note": "Historiske beregninger fra projektets lokale tests. Illustrationer, ikke investeringsprognoser."
+  },
+  "market_2025": {
+    "gross_dkk": 5683268,
+    "wear_dkk": 1907515,
+    "net_variable_dkk": 3775753,
+    "bought_mwh": 7626.7,
+    "sold_mwh": 6864.03,
+    "method": "Månedsvis perfekt prisviden, 12 måneder med batteriet tomt ved månedsgrænser. Ingen tariffer eller handelsgebyrer."
+  },
+  "strategy_2025_q4": {
+    "start": "2025-10-03",
+    "end": "2025-12-31",
+    "days": 90,
+    "oracle_dkk": 482506,
+    "cycles_day_max": 1.0,
+    "assumptions": "Ingen tariffer eller handelsgebyrer. Batterislitage 277,90 kr./MWh afladet. Fuld gennemførelse af bud.",
+    "results": [
+      {
+        "strategy": "Kalenderregression",
+        "profit_dkk": 217967,
+        "oracle_share": 0.45173819428261985,
+        "cycles": 87.3481,
+        "loss_days": 46,
+        "mae": 201.663,
+        "drawdown_dkk": 21041
+      },
+      {
+        "strategy": "Gradient Boosting (ML)",
+        "profit_dkk": 173131,
+        "oracle_share": 0.35881489429231717,
+        "cycles": 66.1311,
+        "loss_days": 35,
+        "mae": 215.484,
+        "drawdown_dkk": 24818
+      },
+      {
+        "strategy": "Historisk prisprofil",
+        "profit_dkk": 157737,
+        "oracle_share": 0.32691082746659095,
+        "cycles": 65.2739,
+        "loss_days": 35,
+        "mae": 212.429,
+        "drawdown_dkk": 15049
+      },
+      {
+        "strategy": "Gårsdagens priser",
+        "profit_dkk": 152308,
+        "oracle_share": 0.3156605010202937,
+        "cycles": 64.1151,
+        "loss_days": 39,
+        "mae": 213.35,
+        "drawdown_dkk": 22153
+      },
+      {
+        "strategy": "Fast nat/aften",
+        "profit_dkk": 28388,
+        "oracle_share": 0.058834888356268863,
+        "cycles": 85.3815,
+        "loss_days": 55,
+        "mae": null,
+        "drawdown_dkk": 81795
+      }
+    ]
+  }
+}
